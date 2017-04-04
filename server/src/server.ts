@@ -9,7 +9,7 @@ import {
 	createConnection, IConnection, TextDocumentSyncKind,
 	TextDocuments, TextDocument, Diagnostic, DiagnosticSeverity,
 	InitializeParams, InitializeResult, TextDocumentPositionParams,
-	CompletionItem, CompletionItemKind
+	CompletionItem, CompletionItemKind, Location
 } from 'vscode-languageserver';
 
 // Create a connection for the server. The connection uses Node's IPC as a transport
@@ -29,6 +29,7 @@ connection.onInitialize((params): InitializeResult => {
 	workspaceRoot = params.rootPath;
 	return {
 		capabilities: {
+			definitionProvider : true,
 			// Tell the client that the server works in FULL text document sync mode
 			textDocumentSync: documents.syncKind,
 			// Tell the client that the server support code complete
@@ -128,6 +129,21 @@ connection.onCompletionResolve((item: CompletionItem): CompletionItem => {
 	}
 	return item;
 });
+
+connection.onDefinition((TextDocumentPositionParams: TextDocumentPositionParams): Location => {
+	
+	var x = TextDocumentPositionParams;
+	
+	return {
+		uri: TextDocumentPositionParams.textDocument.uri,
+		range: {
+			start: TextDocumentPositionParams.position,
+			end: TextDocumentPositionParams.position
+		}
+
+	}
+});
+
 
 let t: Thenable<string>;
 

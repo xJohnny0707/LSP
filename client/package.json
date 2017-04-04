@@ -12,11 +12,29 @@
     "Other"
   ],
   "activationEvents": [
-    "onLanguage:plaintext"
+    "onLanguage:fip"
   ],
   "main": "./out/src/extension",
   "contributes": {
     "configuration": {
+      "languages": [{
+            "id": "fip",
+            "aliases": ["FIP", "fip"],
+            "extensions": [
+                "sfg",
+                "acc",
+                "sub",
+                "h",
+                "h1",
+                "h2"
+            ],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "fip",
+            "scopeName": "source.fip",
+            "path": "./syntaxes/fip.tmLanguage.json"
+        }],
       "type": "object",
       "title": "Example configuration",
       "properties": {

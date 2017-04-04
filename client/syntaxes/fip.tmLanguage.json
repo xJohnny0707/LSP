@@ -1,0 +1,77 @@
+{
+	"name": "FIP",
+	"patterns": [
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#strings"
+		},
+		{
+			"include": "#comments"
+		},
+		{
+			"include": "#types"
+		},
+		{
+			"include": "#functions"
+		},
+		{
+			"include": "#numerics"
+		},
+		{
+			"include": "#support"
+		},
+		{
+			"include": "#routine"
+		}
+	],
+	"repository": {
+		"keywords": {
+			"patterns": [{
+				"name": "keyword.fip",
+				"match": "\\b(break|case|continue|default|do|else|for|goto|if|_Pragma|return|switch|while|loop|program|define|outmask|short|initial|values|include|call|then|help|occurs)\\b"
+			}]
+		},
+		"functions": {
+			"patterns": [{
+				"name": "support.variable.fip",
+				"match": "\\$([a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*)"
+			}]
+		},
+		"routine": {
+			"patterns": [{
+				"name": "support.variable.fip",
+				"match": "\\b(routine)\\b"
+			}]
+		},
+		"types": {
+			"patterns": [{
+				"name": "support.type.fip",
+				"match": "\\b(numeric|date|char)\\b"
+			}]
+		},
+		"numerics": {
+			"patterns": [{
+				"name": "constant.numeric.fip",
+				"match": "\\b((0(x|X)[0-9a-fA-F]*(\\.[0-9a-fA-F]+p-?\\d+)?)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\\b"
+			}]
+		},
+		"strings": {
+			"name": "string.quoted.double.fip",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.fip",
+					"match": "\\\\."
+				}
+			]
+		},
+		"comments": {
+			"name": "comment.line.fip",
+			"match": "(\\#).*$\n?"
+		}
+	},
+	"scopeName": "source.fip"
+}
