@@ -12,6 +12,11 @@ import {
 	CompletionItem, CompletionItemKind, Location
 } from 'vscode-languageserver';
 
+//JMQ
+import { DefinitionProvider } from "./providers/definition";
+import { Files } from "./util/Files";
+//JMQEND
+
 // Create a connection for the server. The connection uses Node's IPC as a transport
 let connection: IConnection = createConnection(new IPCMessageReader(process), new IPCMessageWriter(process));
 
@@ -29,6 +34,7 @@ connection.onInitialize((params): InitializeResult => {
 	workspaceRoot = params.rootPath;
 	return {
 		capabilities: {
+			//JMQ Tell the clienta that the server support GoToDefinition
 			definitionProvider : true,
 			// Tell the client that the server works in FULL text document sync mode
 			textDocumentSync: documents.syncKind,
@@ -130,20 +136,27 @@ connection.onCompletionResolve((item: CompletionItem): CompletionItem => {
 	return item;
 });
 
-connection.onDefinition((TextDocumentPositionParams: TextDocumentPositionParams): Location => {
-	
-	var x = TextDocumentPositionParams;
-	
-	return {
-		uri: TextDocumentPositionParams.textDocument.uri,
-		range: {
-			start: TextDocumentPositionParams.position,
-			end: TextDocumentPositionParams.position
-		}
+//JMQ
+connection.onDefinition((params, cancellationToken) => {
+    return new Promise((resolve, reject) => {
+        var locations = null;
 
-	}
+        try {
+            let path = Files.getPathFromUri(params.textDocument.uri);
+            let definitionProvider = new DefinitionProvider(params, path);
+            locations = definitionProvider.findDefinition();
+        }
+        catch (ex) {
+            let message = "";
+            if (ex.message) message = ex.message;
+            if (ex.stack) message += " :: STACK TRACE :: " + ex.stack;
+            //if (message && message != "") Debug.sendErrorTelemetry(message);
+        }
+
+        resolve(locations);
+    });
 });
-
+//JMQEND
 
 let t: Thenable<string>;
 
